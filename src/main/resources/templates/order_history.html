@@ -50,6 +50,9 @@
         .order-item {
             padding: 10px;
             border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .order-item:last-child {
@@ -65,7 +68,7 @@
         }
 
         .order-item button {
-            margin-top: 10px;
+            margin-left: 10px;
             background-color: #ff4c4c;
             color: white;
             border: none;
@@ -88,7 +91,6 @@
             color: white;
             text-align: center;
             padding: 20px;
-            position: fixed;
             bottom: 0;
             width: 100%;
         }
@@ -123,12 +125,17 @@
                 return;
             }
 
-            orderHistoryContainer.innerHTML = orderHistory.map(order => `
+            orderHistoryContainer.innerHTML = orderHistory.map((order, index) => `
                 <div class="order-item">
-                    <h3>${order.name}</h3>
-                    <p>Price: ₹${order.price}</p>
-                    <p>Order Time: ${new Date(order.timestamp).toLocaleString()}</p>
-                    <button onclick="buyAgain('${order.name}', '${order.price}')">Buy</button>
+                    <div>
+                        <h3>${order.name}</h3>
+                        <p>Price: ₹${order.price}</p>
+                        <p>Order Time: ${new Date(order.timestamp).toLocaleString()}</p>
+                    </div>
+                    <div>
+                        <button onclick="buyAgain('${order.name}', '${order.price}')">Buy</button>
+                        <button onclick="removeOrder(${index})">Remove</button>
+                    </div>
                 </div>
             `).join('');
         }
@@ -137,6 +144,13 @@
             const order = { name, price };
             localStorage.setItem('currentOrder', JSON.stringify(order));
             window.location.href = '/address';
+        }
+
+        function removeOrder(index) {
+            let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            orderHistory.splice(index, 1); // Remove the order at the specified index
+            localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+            loadOrderHistory(); // Refresh the displayed order history
         }
 
         document.addEventListener('DOMContentLoaded', loadOrderHistory);
