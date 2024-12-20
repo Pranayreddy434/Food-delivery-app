@@ -1,0 +1,137 @@
+/* Basic styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #333;
+    color: white;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+nav ul li {
+    padding: 10px 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Toggle Button for Mobile */
+nav .toggle-btn {
+    display: none;
+    cursor: pointer;
+}
+
+nav .toggle-btn span {
+    width: 30px;
+    height: 4px;
+    background-color: white;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+
+/* Media Query for Small Screens */
+@media (max-width: 768px) {
+    nav ul {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        padding: 15px;
+        width: 100%;
+        text-align: center;
+    }
+
+    nav .toggle-btn {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+
+    nav.active ul {
+        display: block;
+    }
+
+    nav .toggle-btn.active span:nth-child(1) {
+        transform: rotate(-45deg);
+        position: relative;
+        top: 10px;
+    }
+
+    nav .toggle-btn.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    nav .toggle-btn.active span:nth-child(3) {
+        transform: rotate(45deg);
+        position: relative;
+        top: -10px;
+    }
+}
+
+/* Forms and Inputs */
+form {
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+/* Buttons */
+button {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Order History</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+
+        header {
+            background-color: #ff4c4c;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 16px;
+        }
+
+        nav a:hover {
+            background-color: #ff4c4c;
+            border-radius: 5px;
+        }
+
+        .order-history-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item h3 {
+            margin: 0;
+        }
+
+        .order-item p {
+            margin: 5px 0;
+        }
+
+        .order-item button {
+            margin-top: 10px;
+            background-color: #ff4c4c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .order-item button:hover {
+            background-color: #e43e3e;
+        }
+
+        .no-orders {
+            text-align: center;
+            color: #666;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Order History</h1>
+    </header>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/menu">Menu</a>
+        <a href="/login">Login</a>
+    </nav>
+
+    <div class="order-history-container" id="order-history">
+      
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Online Food Ordering System</p>
+    </footer>
+
+    <script>
+        function loadOrderHistory() {
+            const orderHistoryContainer = document.getElementById('order-history');
+            const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+
+            if (orderHistory.length === 0) {
+                orderHistoryContainer.innerHTML = '<p class="no-orders">No orders placed yet.</p>';
+                return;
+            }
+
+            orderHistoryContainer.innerHTML = orderHistory.map(order => `
+                <div class="order-item">
+                    <h3>${order.name}</h3>
+                    <p>Price: ₹${order.price}</p>
+                    <p>Order Time: ${new Date(order.timestamp).toLocaleString()}</p>
+                    <button onclick="buyAgain('${order.name}', '${order.price}')">Buy</button>
+                </div>
+            `).join('');
+        }
+
+        function buyAgain(name, price) {
+            const order = { name, price };
+            localStorage.setItem('currentOrder', JSON.stringify(order));
+            window.location.href = '/address';
+        }
+
+        document.addEventListener('DOMContentLoaded', loadOrderHistory);
+    </script>
+</body>
+</html>

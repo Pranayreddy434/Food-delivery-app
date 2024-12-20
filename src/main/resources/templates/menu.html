@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+            padding-top: 70px; /* Adjust for fixed header */
+        }
+
+        header {
+            background-color: #ff4c4c;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height:60px;
+                    }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        nav {
+            background-color: #333;
+            position: fixed;
+            top: 60px;
+            width: 100%;
+            z-index: 999;
+            transition: 0.3s;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style-type: none;
+            padding: 10px;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 12px 20px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: #ff4c4c;
+            border-radius: 5px;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .menu-container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-item {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .menu-item-details {
+            padding: 15px;
+        }
+
+        .menu-item-details h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .menu-item-details p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .menu-item-details .price {
+            font-weight: bold;
+            color: #ff4c4c;
+        }
+
+        .order-btn {
+            background-color: #ff4c4c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .order-btn:hover {
+            background-color: #e04c4c;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media screen and (max-width: 768px) {
+            nav ul {
+                display: none;
+                width: 100%;
+                text-align: left;
+                padding: 0;
+                background-color: #333;
+            }
+
+            nav ul li {
+                display: block;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            nav.active ul {
+                display: block;
+            }
+        }
+    </style>
+   <script>
+    function placeOrder(foodItem) {
+        const order = {
+            id: foodItem.id,
+            name: foodItem.name,
+            price: foodItem.price,
+            quantity: 1,
+            timestamp: new Date().toISOString()
+        };
+
+        // Get existing order history from localStorage
+        let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+
+        // Add new order to the history
+        orderHistory.push(order);
+
+        // Save updated order history to localStorage
+        localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+
+        // Show a confirmation alert
+        alert(`Order for ${foodItem.name} has been placed successfully!`);
+    }
+
+    // Attach click event to all order buttons
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.order-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const foodItem = {
+                    id: this.getAttribute('data-id'),
+                    name: this.getAttribute('data-name'),
+                    price: this.getAttribute('data-price')
+                };
+                placeOrder(foodItem);
+            });
+        });
+    });
+</script>
+
+
+</head>
+<body>
+    <header>
+        <h1>Our Menu</h1>
+    </header>
+
+    <nav>
+        <span class="menu-toggle" onclick="toggleMenu()">&#9776;</span>
+        <ul>
+            <li><a href="/">Home</a></li>
+          
+            <li><a href="/order_history">Cart</a></li>
+            <li><a href="/login">Login</a></li>
+           
+            
+           
+        </ul>
+    </nav>
+
+    <div class="menu-container">
+        <h2>Delicious Dishes</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvvAB_Fyv_Ngj8qO7ZOTKb62kMoQql4xHY8ZSAMf_kX5HY5uvCLMbVRrfl2f6UblGpAX0&usqp=CAU" alt="Cheesy Pizza">
+                <div class="menu-item-details">
+                    <h3>Cheesy Pizza</h3>
+                    <p>A delicious pizza topped with lots of cheese and your favorite toppings.</p>
+                    <p class="price">₹500</p>
+                    <button class="order-btn" data-id="1" data-name="Cheesy Pizza" data-price="500">Order Now</button>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsziQD_d2llMdW-5LbR__p0IV3lxN-9NU8A9rBnUB6oG1YvmLROhJqgDDYtYJT4OHLJqY&usqp=CAU" alt="Juicy Burger">
+                <div class="menu-item-details">
+                    <h3>Juicy Burger</h3>
+                    <p>A freshly grilled burger with a juicy patty, lettuce, and tomato.</p>
+                    <p class="price">₹250</p>
+                    <button class="order-btn" data-id="2" data-name="Juicy Burger" data-price="250">Order Now</button>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2RpiWzcKquAWP1jIiJJnHPXStLXNVX3ZvNh_phMaVlSdOjnOjt9-ZRd0McWsppt4WAIY&usqp=CAU" alt="Delicious Pasta">
+                <div class="menu-item-details">
+                    <h3>Delicious Pasta</h3>
+                    <p>A creamy and flavorful pasta dish with your choice of sauce.</p>
+                    <p class="price">₹350</p>
+                    <button class="order-btn" data-id="3" data-name="Delicious Pasta" data-price="350">Order Now</button>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTG9xU5rHtDiFNVDj9TlPef64KA03ioR6VILrNTPEalLT3p6LVWIGwWaBGqXGjzMAqOdLQ&usqp=CAU" alt="Fresh Sushi">
+                <div class="menu-item-details">
+                    <h3>Fresh Sushi</h3>
+                    <p>Freshly prepared sushi with various fillings to satisfy your cravings.</p>
+                    <p class="price">₹450</p>
+                    <button class="order-btn" data-id="4" data-name="Fresh Sushi" data-price="450">Order Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Online Food Ordering System</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            var nav = document.querySelector('nav');
+            nav.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

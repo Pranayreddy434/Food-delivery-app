@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Address Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+
+        .address-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin: 10px 0 5px;
+        }
+
+        input, textarea, button {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #ff4c4c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #e43e3e;
+        }
+    </style>
+</head>
+<body>
+    <div class="address-container">
+        <h1>Enter Delivery Address</h1>
+        <form onsubmit="submitAddress(event)">
+            <label for="name">Name</label>
+            <input type="text" id="name" required>
+
+            <label for="address">Address</label>
+            <textarea id="address" rows="4" required></textarea>
+
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" required>
+
+            <button type="submit">Proceed to Payment</button>
+        </form>
+    </div>
+
+    <script>
+        function submitAddress(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const phone = document.getElementById('phone').value;
+
+            const currentOrder = JSON.parse(localStorage.getItem('currentOrder'));
+            const orderWithAddress = { ...currentOrder, name, address, phone };
+            localStorage.setItem('orderWithAddress', JSON.stringify(orderWithAddress));
+
+            window.location.href = '/payment';
+        }
+    </script>
+</body>
+</html>
