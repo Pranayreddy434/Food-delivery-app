@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - FoodExpress</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4757;
+            --primary-dark: #ff2e43;
+            --secondary: #2ed573;
+            --dark: #2f3542;
+            --light: #f1f2f6;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background Image Container */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .background-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Overlay for better text visibility */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(0, 0, 0, 0.7) 0%, 
+                rgba(0, 0, 0, 0.5) 50%, 
+                rgba(0, 0, 0, 0.7) 100%);
+            z-index: -1;
+        }
+
+        /* Animated background pattern */
+        .pattern-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 71, 87, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(46, 213, 115, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-20px, -20px) rotate(1deg); }
+            66% { transform: translate(20px, -10px) rotate(-1deg); }
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .logo i {
+            font-size: 2.8rem;
+        }
+
+        .confirmation-container {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9);
+            opacity: 0;
+            animation: zoomIn 0.6s ease forwards;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .confirmation-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        @keyframes zoomIn {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--secondary), #27ae60);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: var(--white);
+            font-size: 2.5rem;
+            box-shadow: 0 8px 25px rgba(46, 213, 115, 0.4);
+            animation: bounce 1s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        h1 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 2.2rem;
+        }
+
+        .confirmation-message {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .order-details {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .order-items {
+            margin-bottom: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            transition: var(--transition);
+        }
+
+        .order-item:hover {
+            background: rgba(255, 255, 255, 0.5);
+            padding-left: 10px;
+            padding-right: 10px;
+            margin: 0 -10px;
+            border-radius: 8px;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .item-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .order-item:hover .item-image {
+            transform: scale(1.05);
+        }
+
+        .item-details h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .item-details p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .order-summary {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .detail-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .detail-row.total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+
+        .tracking-info {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .tracking-info h3 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tracking-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 25px 0;
+        }
+
+        .tracking-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .tracking-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-icon {
+            width: 30px;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            margin-bottom: 8px;
+            transition: var(--transition);
+            font-size: 0.8rem;
+        }
+
+        .step-icon.active {
+            background: var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        .step-icon.completed {
+            background: var(--secondary);
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .step-label.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
+            }
+        }
+
+        .estimated-time {
+            background: rgba(255, 71, 87, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .estimated-time p {
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .action-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .track-order-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .track-order-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+        }
+
+        .back-to-menu-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .back-to-menu-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: confettiFall 5s linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(1000px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .back-to-home {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-to-home a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-to-home a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Preloader for background image */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .preloader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media screen and (max-width: 768px) {
+            .confirmation-container {
+                padding: 30px 20px;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .tracking-steps {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .tracking-steps::before {
+                display: none;
+            }
+
+            .tracking-step {
+                flex-direction: row;
+                gap: 15px;
+            }
+
+            .step-label {
+                text-align: left;
+            }
+
+            .item-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .item-image {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Fallback for no background image support */
+        .no-image-support {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-spinner"></div>
+    </div>
+
+    <!-- Background Image Container -->
+    <div class="background-container">
+        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
+             alt="Food Background" 
+             class="background-image"
+             onerror="this.style.display='none'; document.body.classList.add('no-image-support')">
+    </div>
+
+    <!-- Overlay for better text visibility -->
+    <div class="overlay"></div>
+    
+    <!-- Animated pattern overlay -->
+    <div class="pattern-overlay"></div>
+
+    <div class="logo-container">
+        <a href="/" class="logo">
+            <i class="fas fa-utensils"></i>
+            FoodExpress
+        </a>
+    </div>
+
+    <div class="confirmation-container">
+        <div class="success-icon">
+            <i class="fas fa-check"></i>
+        </div>
+
+        <h1>Order Confirmed!</h1>
+        <p class="confirmation-message">
+            Thank you for your order! Your food is being prepared and will be delivered soon.
+        </p>
+
+        <div class="order-details">
+            <div class="order-items" id="orderItems">
+                <!-- Order items will be loaded here -->
+            </div>
+            
+            <div class="order-summary">
+                <div class="detail-row">
+                    <span class="detail-label">Order Number</span>
+                    <span class="detail-value" id="orderNumber">#ORD001</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Estimated Delivery</span>
+                    <span class="detail-value" id="deliveryTime">30-45 minutes</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Payment Method</span>
+                    <span class="detail-value" id="paymentMethod">Credit Card</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Subtotal</span>
+                    <span class="detail-value" id="subtotal">₹0</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Delivery Fee</span>
+                    <span class="detail-value" id="deliveryFee">₹30</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Tax</span>
+                    <span class="detail-value" id="tax">₹0</span>
+                </div>
+                <div class="detail-row total">
+                    <span class="detail-label">Total Amount</span>
+                    <span class="detail-value" id="totalAmount">₹0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tracking-info">
+            <h3><i class="fas fa-shipping-fast"></i> Order Tracking</h3>
+            
+            <div class="tracking-steps">
+                <div class="tracking-step">
+                    <div class="step-icon completed">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-label">Order Placed</div>
+                </div>
+                <div class="tracking-step">
+                    <div class="step-icon active">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="step-label active">Preparing</div>
+                </div>
+                <div class="tracking-step">
+                    <div class="step-icon">
+                        <i class="fas fa-motorcycle"></i>
+                    </div>
+                    <div class="step-label">On the Way</div>
+                </div>
+                <div class="tracking-step">
+                    <div class="step-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="step-label">Delivered</div>
+                </div>
+            </div>
+
+            <div class="estimated-time">
+                <p><i class="fas fa-clock"></i> Estimated delivery: 30-45 minutes</p>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/order_history" class="action-btn track-order-btn">
+                <i class="fas fa-history"></i> View Order History
+            </a>
+            <a href="/menu" class="action-btn back-to-menu-btn">
+                <i class="fas fa-utensils"></i> Order More
+            </a>
+        </div>
+    </div>
+
+    <div class="back-to-home">
+        <a href="/">
+            <i class="fas fa-home"></i> Back to Home
+        </a>
+    </div>
+
+    <script>
+        // Hide preloader when page loads
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 500);
+        });
+
+        // Image mapping for menu items
+        const itemImages = {
+            '1': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            '2': 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            '3': 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            '4': 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            '5': 'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            '6': 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            '7': 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            '8': 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
+        };
+
+        // Generate confetti
+        function createConfetti() {
+            const colors = ['#ff4757', '#2ed573', '#ffa502', '#3742fa', '#ff6348'];
+            const container = document.querySelector('.confirmation-container');
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(confetti);
+            }
+        }
+
+        // Simulate order progress with more delay
+        function simulateOrderProgress() {
+            const steps = document.querySelectorAll('.step-icon');
+            let currentStep = 1; // Start from the second step (preparing)
+
+            const progressInterval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    steps[currentStep].classList.add('completed');
+                    if (currentStep > 0) {
+                        steps[currentStep - 1].classList.remove('active');
+                    }
+                    if (currentStep < steps.length - 1) {
+                        steps[currentStep + 1].classList.add('active');
+                    }
+                    currentStep++;
+                } else {
+                    clearInterval(progressInterval);
+                }
+            }, 5000); // Increased delay from 2000ms to 5000ms (5 seconds)
+        }
+
+        // Load order details
+        function loadOrderDetails() {
+            const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            const latestOrder = orderHistory[0]; // Get the most recent order
+            
+            if (latestOrder) {
+                // Display order items
+                const orderItemsContainer = document.getElementById('orderItems');
+                let itemsHTML = '';
+                
+                if (latestOrder.items && latestOrder.items.length > 0) {
+                    latestOrder.items.forEach(item => {
+                        itemsHTML += `
+                            <div class="order-item">
+                                <div class="item-info">
+                                    <img src="${itemImages[item.id] || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'}" 
+                                         alt="${item.name}" class="item-image">
+                                    <div class="item-details">
+                                        <h4>${item.name}</h4>
+                                        <p>Quantity: ${item.quantity}</p>
+                                    </div>
+                                </div>
+                                <div class="item-price">₹${item.price * item.quantity}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    // Fallback: Try to get from cart
+                    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    cart.forEach(item => {
+                        itemsHTML += `
+                            <div class="order-item">
+                                <div class="item-info">
+                                    <img src="${itemImages[item.id] || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'}" 
+                                         alt="${item.name}" class="item-image">
+                                    <div class="item-details">
+                                        <h4>${item.name}</h4>
+                                        <p>Quantity: ${item.quantity}</p>
+                                    </div>
+                                </div>
+                                <div class="item-price">₹${item.price * item.quantity}</div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                orderItemsContainer.innerHTML = itemsHTML;
+
+                // Calculate totals
+                const items = latestOrder.items || JSON.parse(localStorage.getItem('cart')) || [];
+                const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const tax = subtotal * 0.05; // 5% tax
+                const deliveryFee = 30;
+                const total = subtotal + tax + deliveryFee;
+
+                // Update order details
+                document.getElementById('orderNumber').textContent = '#' + (latestOrder.orderId || `ORD${Date.now().toString().slice(-6)}`);
+                document.getElementById('paymentMethod').textContent = formatPaymentMethod(latestOrder.paymentMethod || 'card');
+                document.getElementById('subtotal').textContent = '₹' + subtotal;
+                document.getElementById('tax').textContent = '₹' + tax.toFixed(0);
+                document.getElementById('deliveryFee').textContent = '₹' + deliveryFee;
+                document.getElementById('totalAmount').textContent = '₹' + total.toFixed(0);
+            } else {
+                // Fallback: Load from cart and address data
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const orderWithAddress = JSON.parse(localStorage.getItem('orderWithAddress'));
+                
+                if (cart.length > 0) {
+                    const orderItemsContainer = document.getElementById('orderItems');
+                    let itemsHTML = '';
+                    
+                    cart.forEach(item => {
+                        itemsHTML += `
+                            <div class="order-item">
+                                <div class="item-info">
+                                    <img src="${itemImages[item.id] || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'}" 
+                                         alt="${item.name}" class="item-image">
+                                    <div class="item-details">
+                                        <h4>${item.name}</h4>
+                                        <p>Quantity: ${item.quantity}</p>
+                                    </div>
+                                </div>
+                                <div class="item-price">₹${item.price * item.quantity}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    orderItemsContainer.innerHTML = itemsHTML;
+
+                    // Calculate totals
+                    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const tax = subtotal * 0.05;
+                    const deliveryFee = 30;
+                    const total = subtotal + tax + deliveryFee;
+
+                    document.getElementById('orderNumber').textContent = '#ORD' + Date.now().toString().slice(-6);
+                    document.getElementById('paymentMethod').textContent = 'Cash on Delivery'; // Default
+                    document.getElementById('subtotal').textContent = '₹' + subtotal;
+                    document.getElementById('tax').textContent = '₹' + tax.toFixed(0);
+                    document.getElementById('deliveryFee').textContent = '₹' + deliveryFee;
+                    document.getElementById('totalAmount').textContent = '₹' + total.toFixed(0);
+                }
+            }
+        }
+
+        function formatPaymentMethod(method) {
+            const methods = {
+                'card': 'Credit/Debit Card',
+                'upi': 'UPI Payment',
+                'cod': 'Cash on Delivery'
+            };
+            return methods[method] || method;
+        }
+
+        // Add parallax effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const patternOverlay = document.querySelector('.pattern-overlay');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            patternOverlay.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+        });
+
+        // Initialize when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            loadOrderDetails();
+            createConfetti();
+            simulateOrderProgress();
+        });
+    </script>
+</body>
+</html>

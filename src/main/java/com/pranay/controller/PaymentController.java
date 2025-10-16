@@ -1,6 +1,5 @@
 package com.pranay.controller;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -11,6 +10,7 @@ public class PaymentController {
     public String paymentPage() {
         return "payment";
     }
+
     @GetMapping("/address")
     public String address() {
         return "address";
