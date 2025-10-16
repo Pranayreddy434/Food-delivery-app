@@ -40,8 +40,9 @@ public class UserController {
         userService.saveUser(user);
         return "redirect:/login"; 
     }
+
     @GetMapping("/order_history")
-    public String order() {
+    public String orderHistory() {
         return "order_history"; 
     }
 }

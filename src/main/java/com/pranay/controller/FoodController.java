@@ -13,9 +13,19 @@ public class FoodController {
     @Autowired
     private FoodService foodService;
 
+    @GetMapping("/")
+    public String home() {
+        return "index";
+    }
+
     @GetMapping("/menu")
     public String showMenu(Model model) {
         model.addAttribute("foodItems", foodService.getAllFoodItems());
         return "menu";
+    }
+
+    @GetMapping("/cart")
+    public String showCart() {
+        return "cart";
     }
 }
